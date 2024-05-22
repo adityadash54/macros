@@ -27,7 +27,7 @@
 #include <phool/recoConsts.h>
 
 #include <trackingqa/InttClusterQA.h>
-#include <trackingqa/MicromegasClusterQA.h>
+//#include <trackingqa/MicromegasClusterQA.h>
 #include <trackingqa/MvtxClusterQA.h>
 #include <trackingqa/TpcClusterQA.h>
 
@@ -41,16 +41,16 @@ R__LOAD_LIBRARY(libffamodules.so)
 R__LOAD_LIBRARY(libmvtx.so)
 R__LOAD_LIBRARY(libintt.so)
 R__LOAD_LIBRARY(libtpc.so)
-R__LOAD_LIBRARY(libmicromegas.so)
+//R__LOAD_LIBRARY(libmicromegas.so)
 R__LOAD_LIBRARY(libTrackingDiagnostics.so)
 R__LOAD_LIBRARY(libtrackingqa.so)
 void Fun4All_FieldOnAllTrackers(
-    const int nEvents = 0,
+    const int nEvents = 10,
     const std::string tpcfilename = "DST_BEAM_run2pp_new_2023p013-00041989-0000.root",
     const std::string tpcdir = "/sphenix/lustre01/sphnxpro/commissioning/slurp/tpcbeam/run_00041900_00042000/",
     const std::string outfilename = "clusters_seeds",
     const bool convertSeeds = true)
-{
+{ Enable::QA=true;
   std::string inputtpcRawHitFile = tpcdir + tpcfilename;
 
   G4TRACKING::convert_seeds_to_svtxtracks = convertSeeds;
@@ -92,7 +92,7 @@ void Fun4All_FieldOnAllTrackers(
   Mvtx_HitUnpacking();
   Intt_HitUnpacking();
   Tpc_HitUnpacking();
-  Micromegas_HitUnpacking();
+  //Micromegas_HitUnpacking();
 
   Mvtx_Clustering();
   Intt_Clustering();
@@ -103,7 +103,7 @@ void Fun4All_FieldOnAllTrackers(
   tpcclusterizer->set_rawdata_reco();
   se->registerSubsystem(tpcclusterizer);
 
-  Micromegas_Clustering();
+  //Micromegas_Clustering();
 
   /*
    * Begin Track Seeding
@@ -178,7 +178,7 @@ void Fun4All_FieldOnAllTrackers(
   silicon_match->set_eta_search_window(0.008);
   silicon_match->set_test_windows_printout(false);  // used for tuning search windows
   se->registerSubsystem(silicon_match);
-
+/*
   // Match TPC track stubs from CA seeder to clusters in the micromegas layers
   auto mm_match = new PHMicromegasTpcTrackMatching;
   mm_match->Verbosity(0);
@@ -190,7 +190,7 @@ void Fun4All_FieldOnAllTrackers(
   mm_match->set_min_tpc_layer(38);             // layer in TPC to start projection fit
   mm_match->set_test_windows_printout(false);  // used for tuning search windows only
   se->registerSubsystem(mm_match);
-
+*/
   /*
    * End Track Seeding
    */
@@ -221,7 +221,7 @@ void Fun4All_FieldOnAllTrackers(
     actsFit->commissioning(G4TRACKING::use_alignment);
     // in calibration mode, fit only Silicons and Micromegas hits
     actsFit->fitSiliconMMs(G4TRACKING::SC_CALIBMODE);
-    actsFit->setUseMicromegas(G4TRACKING::SC_USE_MICROMEGAS);
+    //actsFit->setUseMicromegas(G4TRACKING::SC_USE_MICROMEGAS);
     actsFit->set_pp_mode(TRACKING::pp_mode);
     actsFit->set_use_clustermover(true);  // default is true for now
     actsFit->useActsEvaluator(false);
@@ -257,10 +257,10 @@ void Fun4All_FieldOnAllTrackers(
   // se->registerOutputManager(out);
   if (Enable::QA)
   {
-    se->registerSubsystem(new MvtxClusterQA);
-    se->registerSubsystem(new InttClusterQA);
+    //se->registerSubsystem(new MvtxClusterQA);
+    //se->registerSubsystem(new InttClusterQA);
     se->registerSubsystem(new TpcClusterQA);
-    se->registerSubsystem(new MicromegasClusterQA);
+    //se->registerSubsystem(new MicromegasClusterQA);
   }
   se->run(nEvents);
   se->End();
