@@ -45,7 +45,9 @@ R__LOAD_LIBRARY(libtpc.so)
 R__LOAD_LIBRARY(libTrackingDiagnostics.so)
 R__LOAD_LIBRARY(libtrackingqa.so)
 void Fun4All_FieldOnAllTrackers(
-    const int nEvents = 10,
+    const int nEvents = 100,
+  //  const std::string tpcfilename = "DST_TPCCALIB_run2pp_new_2024p001-00043241-0000.root",
+    //const std::string tpcdir = "/sphenix/lustre01/sphnxpro/commissioning/slurp/tpccalib/run_00043200_00043300/",
     const std::string tpcfilename = "DST_BEAM_run2pp_new_2023p013-00041989-0000.root",
     const std::string tpcdir = "/sphenix/lustre01/sphnxpro/commissioning/slurp/tpcbeam/run_00041900_00042000/",
     const std::string outfilename = "clusters_seeds",
